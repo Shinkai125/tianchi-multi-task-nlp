@@ -1,68 +1,35 @@
 # tianchi-multi-task-nlp
 NLP中文预训练模型泛化能力挑战赛
 
----
 
-机器信息：NVIDIA-SMI 440.33.01    Driver Version: 440.33.01    CUDA Version: 10.2
-
-pytorch 版本 1.6.0
-
----
-
-已修复inference全为一个种类的bug，inference的时候设了一个max_len的padding。。。。
-
----
-
-pytorch版本 baseline f1-score 0.616
-
-需要安装 huggingface 和 pytorch
-
-安装 huggingface：
-
-pip install transformers
-
----
-
-首先去 https://huggingface.co/bert-base-chinese/tree/main 下载config.json vocab.txt pytorch_model.bin
-
-然后把这三个文件放进tianchi-multi-task-nlp/bert_pretrain_model文件夹下
-
-然后把比赛 https://tianchi.aliyun.com/competition/entrance/531841/information 的数据下载
+## 下载数据
+把比赛 https://tianchi.aliyun.com/competition/entrance/531841/information 的数据下载
 
 *_train1128.csv 文件改名为 total.csv 并放进 tianchi-multi-task-nlp/tianchi_datasets/数据集名字 文件夹下
 
 *_a.csv 文件改名为 test.csv 并放进 tianchi-multi-task-nlp/tianchi_datasets/数据集名字 文件夹下
 
-例如 tianchi-multi-task-nlp/tianchi_datasets/OCNLI/total.csv
-
-tianchi-multi-task-nlp/tianchi_datasets/OCNLI/test.csv
-
----
+## 划分数据集
 
 分开训练集和验证集，默认验证集是各3000条数据，参数可以自己修改：
 
 python ./generate_data.py
 
----
+## 训练模型
 
 训练模型：
 
 python ./train.py
 
-会保存验证集上平均f1分数最高的模型到 ./saved_best.pt
+会保存验证集上平均f1分数最高的模型到 `./saved_best.pt`
 
-如果要挂后台进程训练请用如下命令：
-
-nohup python -u ./train.py >train.log 2>&1 &
+如果要挂后台进程训练请用如下命令：`nohup python -u ./train.py >train.log 2>&1 &`
 
 训练日志会写进 ./train.log
 
-用如下命令查看训练情况：
+用如下命令查看训练情况：`tail -f ./train.log`
 
-tail -f ./train.log
-
----
-
+## 预测
 在输出预测结果前，先在 tianchi-multi-task-nlp/submission 下新建一个文件夹 5928
 
 由于验证集的f1分数是0.5928，所以我就用这个文件夹名
@@ -79,7 +46,7 @@ zip -r ./submit.zip ./*.json
 
 生成submit.zip 提交结果即可，本baseline只有大概58的f1分数
 
----
+## TODO
 
 这个模型是最简单的bert-base，可以考虑以下几点进行优化
 
